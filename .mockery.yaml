@@ -1,0 +1,8 @@
+packages:
+  arise_tech_assetment/internal/infrastructure/repository:
+    config:
+      all: true
+      dir: "mocks"
+      filename: "mock_{{.InterfaceName}}.go"
+      structname: "Mock{{.InterfaceName}}"
+      pkgname: "mocks"

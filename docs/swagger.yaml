@@ -1,0 +1,655 @@
+basePath: /api/v1
+definitions:
+  commands.CancelTransactionResponse:
+    properties:
+      transaction:
+        $ref: '#/definitions/domain.Transaction'
+    type: object
+  commands.CreateAccountCommand:
+    properties:
+      holder_name:
+        type: string
+      initial_balance:
+        $ref: '#/definitions/domain.Money'
+      number:
+        type: string
+    required:
+    - holder_name
+    - initial_balance
+    - number
+    type: object
+  commands.CreateAccountResponse:
+    properties:
+      account:
+        $ref: '#/definitions/domain.Account'
+    type: object
+  commands.CreateTransactionCommand:
+    properties:
+      amount:
+        $ref: '#/definitions/domain.Money'
+      description:
+        type: string
+      from_account_id:
+        type: string
+      to_account_id:
+        type: string
+      type:
+        $ref: '#/definitions/domain.TransactionType'
+    required:
+    - amount
+    - description
+    - type
+    type: object
+  commands.CreateTransactionResponse:
+    properties:
+      transaction:
+        $ref: '#/definitions/domain.Transaction'
+    type: object
+  commands.DeleteAccountResponse:
+    properties:
+      success:
+        type: boolean
+    type: object
+  commands.ProcessTransactionResponse:
+    properties:
+      transaction:
+        $ref: '#/definitions/domain.Transaction'
+    type: object
+  commands.UpdateAccountCommand:
+    properties:
+      holder_name:
+        type: string
+      id:
+        type: string
+    required:
+    - id
+    type: object
+  commands.UpdateAccountResponse:
+    properties:
+      account:
+        $ref: '#/definitions/domain.Account'
+    type: object
+  domain.Account:
+    properties:
+      balance:
+        $ref: '#/definitions/domain.Money'
+      created_at:
+        type: string
+      holder_name:
+        type: string
+      id:
+        type: string
+      number:
+        type: string
+      status:
+        $ref: '#/definitions/domain.AccountStatus'
+      transactions:
+        items:
+          $ref: '#/definitions/domain.Transaction'
+        type: array
+      updated_at:
+        type: string
+    type: object
+  domain.AccountStatus:
+    enum:
+    - active
+    - inactive
+    - blocked
+    type: string
+    x-enum-varnames:
+    - AccountStatusActive
+    - AccountStatusInactive
+    - AccountStatusBlocked
+  domain.Currency:
+    enum:
+    - THB
+    - USD
+    type: string
+    x-enum-varnames:
+    - THB
+    - USD
+  domain.Money:
+    properties:
+      amount:
+        description: intentional, avoiding floating point issues.
+        type: integer
+      currency:
+        $ref: '#/definitions/domain.Currency'
+    type: object
+  domain.Transaction:
+    properties:
+      amount:
+        $ref: '#/definitions/domain.Money'
+      created_at:
+        type: string
+      description:
+        type: string
+      from_account:
+        $ref: '#/definitions/domain.Account'
+      from_account_id:
+        type: string
+      id:
+        type: string
+      processed_at:
+        type: string
+      reference:
+        type: string
+      status:
+        $ref: '#/definitions/domain.TransactionStatus'
+      to_account:
+        $ref: '#/definitions/domain.Account'
+      to_account_id:
+        type: string
+      type:
+        $ref: '#/definitions/domain.TransactionType'
+      updated_at:
+        type: string
+    type: object
+  domain.TransactionStatus:
+    enum:
+    - pending
+    - completed
+    - failed
+    - cancelled
+    type: string
+    x-enum-varnames:
+    - TransactionStatusPending
+    - TransactionStatusCompleted
+    - TransactionStatusFailed
+    - TransactionStatusCancelled
+  domain.TransactionType:
+    enum:
+    - deposit
+    - withdraw
+    - transfer
+    type: string
+    x-enum-varnames:
+    - TransactionTypeDeposit
+    - TransactionTypeWithdraw
+    - TransactionTypeTransfer
+  queries.GetAccountByNumberResponse:
+    properties:
+      account:
+        $ref: '#/definitions/domain.Account'
+    type: object
+  queries.GetAccountResponse:
+    properties:
+      account:
+        $ref: '#/definitions/domain.Account'
+    type: object
+  queries.GetAccountTransactionsResponse:
+    properties:
+      pagination:
+        $ref: '#/definitions/repository.PaginationResponse-domain_Transaction'
+    type: object
+  queries.GetAccountsResponse:
+    properties:
+      pagination:
+        $ref: '#/definitions/repository.PaginationResponse-domain_Account'
+    type: object
+  queries.GetTransactionResponse:
+    properties:
+      transaction:
+        $ref: '#/definitions/domain.Transaction'
+    type: object
+  queries.GetTransactionsResponse:
+    properties:
+      pagination:
+        $ref: '#/definitions/repository.PaginationResponse-domain_Transaction'
+    type: object
+  repository.PaginationResponse-domain_Account:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/domain.Account'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  repository.PaginationResponse-domain_Transaction:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/domain.Transaction'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: A demo account and transaction management system
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Account API
+  version: "1.0"
+paths:
+  /accounts:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of all accounts
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/queries.GetAccountsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all accounts
+      tags:
+      - accounts
+    post:
+      consumes:
+      - application/json
+      description: Create a new account with holder name, number, and initial balance
+      parameters:
+      - description: Account creation data
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/commands.CreateAccountCommand'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/commands.CreateAccountResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new account
+      tags:
+      - accounts
+  /accounts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an existing account by ID
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commands.DeleteAccountResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete an account
+      tags:
+      - accounts
+    get:
+      consumes:
+      - application/json
+      description: Get a single account by its ID
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/queries.GetAccountResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get account by ID
+      tags:
+      - accounts
+    put:
+      consumes:
+      - application/json
+      description: Update an existing account's information
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Account update data
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/commands.UpdateAccountCommand'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commands.UpdateAccountResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update an account
+      tags:
+      - accounts
+  /accounts/{id}/transactions:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of transactions for a specific account
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/queries.GetAccountTransactionsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get transactions for an account
+      tags:
+      - transactions
+  /accounts/number/{number}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single account by its account number
+      parameters:
+      - description: Account Number
+        in: path
+        name: number
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/queries.GetAccountByNumberResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get account by number
+      tags:
+      - accounts
+  /transactions:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of all transactions
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/queries.GetTransactionsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all transactions
+      tags:
+      - transactions
+    post:
+      consumes:
+      - application/json
+      description: Create a new transaction (deposit, withdraw, or transfer)
+      parameters:
+      - description: Transaction creation data
+        in: body
+        name: transaction
+        required: true
+        schema:
+          $ref: '#/definitions/commands.CreateTransactionCommand'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/commands.CreateTransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new transaction
+      tags:
+      - transactions
+  /transactions/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a single transaction by its ID
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/queries.GetTransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get transaction by ID
+      tags:
+      - transactions
+  /transactions/{id}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: Cancel a pending transaction
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commands.CancelTransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Cancel a transaction
+      tags:
+      - transactions
+  /transactions/{id}/process:
+    post:
+      consumes:
+      - application/json
+      description: Process a pending transaction to completion
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commands.ProcessTransactionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Process a transaction
+      tags:
+      - transactions
+schemes:
+- http
+- https
+swagger: "2.0"

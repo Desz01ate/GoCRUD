@@ -1,0 +1,983 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "A demo account and transaction management system",
+        "title": "Account API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/accounts": {
+            "get": {
+                "description": "Get a paginated list of all accounts",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Get all accounts",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/queries.GetAccountsResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new account with holder name, number, and initial balance",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Create a new account",
+                "parameters": [
+                    {
+                        "description": "Account creation data",
+                        "name": "account",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/commands.CreateAccountCommand"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/commands.CreateAccountResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/number/{number}": {
+            "get": {
+                "description": "Get a single account by its account number",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Get account by number",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Account Number",
+                        "name": "number",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/queries.GetAccountByNumberResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/{id}": {
+            "get": {
+                "description": "Get a single account by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Get account by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Account ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/queries.GetAccountResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing account's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Update an account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Account ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Account update data",
+                        "name": "account",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/commands.UpdateAccountCommand"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/commands.UpdateAccountResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete an existing account by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Delete an account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Account ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/commands.DeleteAccountResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/{id}/transactions": {
+            "get": {
+                "description": "Get a paginated list of transactions for a specific account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transactions"
+                ],
+                "summary": "Get transactions for an account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Account ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/queries.GetAccountTransactionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions": {
+            "get": {
+                "description": "Get a paginated list of all transactions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transactions"
+                ],
+                "summary": "Get all transactions",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/queries.GetTransactionsResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new transaction (deposit, withdraw, or transfer)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transactions"
+                ],
+                "summary": "Create a new transaction",
+                "parameters": [
+                    {
+                        "description": "Transaction creation data",
+                        "name": "transaction",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/commands.CreateTransactionCommand"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/commands.CreateTransactionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/{id}": {
+            "get": {
+                "description": "Get a single transaction by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transactions"
+                ],
+                "summary": "Get transaction by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Transaction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/queries.GetTransactionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/{id}/cancel": {
+            "post": {
+                "description": "Cancel a pending transaction",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transactions"
+                ],
+                "summary": "Cancel a transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Transaction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/commands.CancelTransactionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/{id}/process": {
+            "post": {
+                "description": "Process a pending transaction to completion",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transactions"
+                ],
+                "summary": "Process a transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Transaction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/commands.ProcessTransactionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "commands.CancelTransactionResponse": {
+            "type": "object",
+            "properties": {
+                "transaction": {
+                    "$ref": "#/definitions/domain.Transaction"
+                }
+            }
+        },
+        "commands.CreateAccountCommand": {
+            "type": "object",
+            "required": [
+                "holder_name",
+                "initial_balance",
+                "number"
+            ],
+            "properties": {
+                "holder_name": {
+                    "type": "string"
+                },
+                "initial_balance": {
+                    "$ref": "#/definitions/domain.Money"
+                },
+                "number": {
+                    "type": "string"
+                }
+            }
+        },
+        "commands.CreateAccountResponse": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/domain.Account"
+                }
+            }
+        },
+        "commands.CreateTransactionCommand": {
+            "type": "object",
+            "required": [
+                "amount",
+                "description",
+                "type"
+            ],
+            "properties": {
+                "amount": {
+                    "$ref": "#/definitions/domain.Money"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "from_account_id": {
+                    "type": "string"
+                },
+                "to_account_id": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/domain.TransactionType"
+                }
+            }
+        },
+        "commands.CreateTransactionResponse": {
+            "type": "object",
+            "properties": {
+                "transaction": {
+                    "$ref": "#/definitions/domain.Transaction"
+                }
+            }
+        },
+        "commands.DeleteAccountResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "commands.ProcessTransactionResponse": {
+            "type": "object",
+            "properties": {
+                "transaction": {
+                    "$ref": "#/definitions/domain.Transaction"
+                }
+            }
+        },
+        "commands.UpdateAccountCommand": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "holder_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "commands.UpdateAccountResponse": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/domain.Account"
+                }
+            }
+        },
+        "domain.Account": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "$ref": "#/definitions/domain.Money"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "holder_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/domain.AccountStatus"
+                },
+                "transactions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Transaction"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.AccountStatus": {
+            "type": "string",
+            "enum": [
+                "active",
+                "inactive",
+                "blocked"
+            ],
+            "x-enum-varnames": [
+                "AccountStatusActive",
+                "AccountStatusInactive",
+                "AccountStatusBlocked"
+            ]
+        },
+        "domain.Currency": {
+            "type": "string",
+            "enum": [
+                "THB",
+                "USD"
+            ],
+            "x-enum-varnames": [
+                "THB",
+                "USD"
+            ]
+        },
+        "domain.Money": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "description": "intentional, avoiding floating point issues.",
+                    "type": "integer"
+                },
+                "currency": {
+                    "$ref": "#/definitions/domain.Currency"
+                }
+            }
+        },
+        "domain.Transaction": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "$ref": "#/definitions/domain.Money"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "from_account": {
+                    "$ref": "#/definitions/domain.Account"
+                },
+                "from_account_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "processed_at": {
+                    "type": "string"
+                },
+                "reference": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/domain.TransactionStatus"
+                },
+                "to_account": {
+                    "$ref": "#/definitions/domain.Account"
+                },
+                "to_account_id": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/domain.TransactionType"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.TransactionStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "completed",
+                "failed",
+                "cancelled"
+            ],
+            "x-enum-varnames": [
+                "TransactionStatusPending",
+                "TransactionStatusCompleted",
+                "TransactionStatusFailed",
+                "TransactionStatusCancelled"
+            ]
+        },
+        "domain.TransactionType": {
+            "type": "string",
+            "enum": [
+                "deposit",
+                "withdraw",
+                "transfer"
+            ],
+            "x-enum-varnames": [
+                "TransactionTypeDeposit",
+                "TransactionTypeWithdraw",
+                "TransactionTypeTransfer"
+            ]
+        },
+        "queries.GetAccountByNumberResponse": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/domain.Account"
+                }
+            }
+        },
+        "queries.GetAccountResponse": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/domain.Account"
+                }
+            }
+        },
+        "queries.GetAccountTransactionsResponse": {
+            "type": "object",
+            "properties": {
+                "pagination": {
+                    "$ref": "#/definitions/repository.PaginationResponse-domain_Transaction"
+                }
+            }
+        },
+        "queries.GetAccountsResponse": {
+            "type": "object",
+            "properties": {
+                "pagination": {
+                    "$ref": "#/definitions/repository.PaginationResponse-domain_Account"
+                }
+            }
+        },
+        "queries.GetTransactionResponse": {
+            "type": "object",
+            "properties": {
+                "transaction": {
+                    "$ref": "#/definitions/domain.Transaction"
+                }
+            }
+        },
+        "queries.GetTransactionsResponse": {
+            "type": "object",
+            "properties": {
+                "pagination": {
+                    "$ref": "#/definitions/repository.PaginationResponse-domain_Transaction"
+                }
+            }
+        },
+        "repository.PaginationResponse-domain_Account": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Account"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "repository.PaginationResponse-domain_Transaction": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Transaction"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}
