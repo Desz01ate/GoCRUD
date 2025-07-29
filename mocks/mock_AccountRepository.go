@@ -5,8 +5,8 @@
 package mocks
 
 import (
-	"arise_tech_assetment/internal/domain"
-	"arise_tech_assetment/internal/infrastructure/repository"
+	"arise_tech_assessment/internal/domain"
+	"arise_tech_assessment/internal/infrastructure/repository"
 	"context"
 
 	"github.com/google/uuid"

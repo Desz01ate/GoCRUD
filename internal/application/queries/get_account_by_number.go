@@ -1,7 +1,7 @@
 package queries
 
 import (
-	"arise_tech_assetment/internal/domain"
+	"arise_tech_assessment/internal/domain"
 )
 
 type GetAccountByNumberQuery struct {

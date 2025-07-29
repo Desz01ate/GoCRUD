@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"arise_tech_assetment/internal/application/queries"
-	"arise_tech_assetment/internal/domain"
-	"arise_tech_assetment/mocks"
+	"arise_tech_assessment/internal/application/queries"
+	"arise_tech_assessment/internal/domain"
+	"arise_tech_assessment/mocks"
 	"context"
 	"errors"
 	"testing"

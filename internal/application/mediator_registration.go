@@ -1,8 +1,8 @@
 package application
 
 import (
-	"arise_tech_assetment/internal/application/handlers"
-	"arise_tech_assetment/internal/infrastructure/repository"
+	"arise_tech_assessment/internal/application/handlers"
+	"arise_tech_assessment/internal/infrastructure/repository"
 
 	"github.com/mehdihadeli/go-mediatr"
 	"gorm.io/gorm"

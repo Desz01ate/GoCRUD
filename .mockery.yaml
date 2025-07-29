@@ -1,5 +1,5 @@
 packages:
-  arise_tech_assetment/internal/infrastructure/repository:
+  arise_tech_assessment/internal/infrastructure/repository:
     config:
       all: true
       dir: "mocks"

@@ -1,8 +1,8 @@
 package http
 
 import (
-	"arise_tech_assetment/internal/application/commands"
-	"arise_tech_assetment/internal/application/queries"
+	"arise_tech_assessment/internal/application/commands"
+	"arise_tech_assessment/internal/application/queries"
 	"net/http"
 	"strconv"
 

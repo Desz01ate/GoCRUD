@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"arise_tech_assetment/internal/application/queries"
-	"arise_tech_assetment/internal/infrastructure/repository"
+	"arise_tech_assessment/internal/application/queries"
+	"arise_tech_assessment/internal/infrastructure/repository"
 	"context"
 )
 

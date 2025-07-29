@@ -1,8 +1,8 @@
 package queries
 
 import (
-	"arise_tech_assetment/internal/domain"
-	"arise_tech_assetment/internal/infrastructure/repository"
+	"arise_tech_assessment/internal/domain"
+	"arise_tech_assessment/internal/infrastructure/repository"
 
 	"github.com/google/uuid"
 )

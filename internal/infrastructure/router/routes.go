@@ -1,7 +1,7 @@
 package router
 
 import (
-	"arise_tech_assetment/internal/api/http"
+	"arise_tech_assessment/internal/api/http"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	"arise_tech_assetment/internal/infrastructure/repository"
+	"arise_tech_assessment/internal/infrastructure/repository"
 	"context"
 
 	mock "github.com/stretchr/testify/mock"

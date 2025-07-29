@@ -21,11 +21,11 @@ import (
 	"log"
 	"os"
 
-	"arise_tech_assetment/internal/application"
-	"arise_tech_assetment/internal/infrastructure"
-	"arise_tech_assetment/internal/infrastructure/router"
+	"arise_tech_assessment/internal/application"
+	"arise_tech_assessment/internal/infrastructure"
+	"arise_tech_assessment/internal/infrastructure/router"
 
-	_ "arise_tech_assetment/docs"
+	_ "arise_tech_assessment/docs"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"arise_tech_assetment/internal/application/commands"
-	"arise_tech_assetment/mocks"
+	"arise_tech_assessment/internal/application/commands"
+	"arise_tech_assessment/mocks"
 	"context"
 	"errors"
 	"testing"
@@ -79,31 +79,31 @@ func TestDeleteAccountHandler_Handle_ShouldReturnErrorWhenDatabaseFails(t *testi
 	// Arrange
 	mockRepo := mocks.NewMockAccountRepository(t)
 	handler := NewDeleteAccountHandler(mockRepo)
-	
+
 	accountID := uuid.New()
 	command := &commands.DeleteAccountCommand{
 		ID: accountID,
 	}
 	ctx := context.Background()
-	
+
 	mockRepo.EXPECT().Delete(mock.Anything, accountID).Return(errors.New("failed to delete account"))
-	
+
 	// Act
 	response, err := handler.Handle(ctx, command)
-	
+
 	// Assert
 	if err == nil {
 		t.Error("Expected error from database failure, got nil")
 	}
-	
+
 	if response == nil {
 		t.Fatal("Expected response even on error, got nil")
 	}
-	
+
 	if response.Success {
 		t.Error("Expected success to be false on database error")
 	}
-	
+
 	if err.Error() != "failed to delete account" {
 		t.Errorf("Expected 'failed to delete account' error, got %s", err.Error())
 	}
@@ -113,23 +113,23 @@ func TestDeleteAccountHandler_Handle_ShouldHandleMultipleAccountsCorrectly(t *te
 	// Arrange
 	mockRepo := mocks.NewMockAccountRepository(t)
 	handler := NewDeleteAccountHandler(mockRepo)
-	
+
 	account2ID := uuid.New()
 	command := &commands.DeleteAccountCommand{
 		ID: account2ID,
 	}
 	ctx := context.Background()
-	
+
 	mockRepo.EXPECT().Delete(mock.Anything, account2ID).Return(nil)
-	
+
 	// Act
 	response, err := handler.Handle(ctx, command)
-	
+
 	// Assert
 	if err != nil {
 		t.Errorf("Expected no error, got %v", err)
 	}
-	
+
 	if !response.Success {
 		t.Error("Expected success to be true")
 	}

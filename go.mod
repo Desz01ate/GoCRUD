@@ -1,4 +1,4 @@
-module arise_tech_assetment
+module arise_tech_assessment
 
 go 1.24.5
 

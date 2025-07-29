@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"arise_tech_assetment/internal/domain"
+	"arise_tech_assessment/internal/domain"
 	"database/sql"
 	"errors"
 	"fmt"

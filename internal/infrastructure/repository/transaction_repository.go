@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"arise_tech_assetment/internal/domain"
+	"arise_tech_assessment/internal/domain"
 	"context"
 	"time"
 
