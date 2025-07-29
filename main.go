@@ -36,6 +36,10 @@ func main() {
 		panic(fmt.Errorf("failed to initialize database: %w", err))
 	}
 
+	if err := initializer.Seed(); err != nil {
+		log.Printf("Warning: Failed to seed database: %v", err)
+	}
+
 	application.RegisterHandlers(initializer.DB)
 
 	r := router.New()

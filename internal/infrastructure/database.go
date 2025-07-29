@@ -110,3 +110,8 @@ func (initializer *DatabaseInitializer) Init() error {
 
 	return nil
 }
+
+func (initializer *DatabaseInitializer) Seed() error {
+	seeder := NewSeeder(initializer.DB)
+	return seeder.SeedData()
+}
